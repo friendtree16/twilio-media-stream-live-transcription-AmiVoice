@@ -1,50 +1,36 @@
-# Basic Demo
+# Twilio Media Streams と AmiVoice Cloud Platformの連携サンプル
 
-This is a basic server application that consumes audio from Twilio Media Streams.
-
-It's a good starting point to develop your own application logic.
+このサンプルはTwilioの電話音声をリアルタイムに取得できるTwilio Media Streamsと[AmiVoice Cloud Platform](https://acp.amivoice.com/main/)の連携サンプルです。
 
 ## App sever setup
 
 ### Installation
 
 **Requires Node >= v12.1.0**
-
-Run `npm install`
-
-npm dependencies (contained in the `package.json`):
-* httpdispatcher
-* websocket
+以下コマンドを実行
+```npm install```
 
 #### Running the server
-
-Start with `node ./server.js`
+以下コマンドを実行
+`node ./server.js`
 
 ## Setup
 
-You can setup your environment to run the demo by using the CLI (BETA) or the Console.
+### 設定
+1. [Twilio アカウント作成](https://cloudapi.kddi-web.com/signup)
 
-### Configure using the CLI
+1. [電話番号の購入](https://cloudapi.kddi-web.com/magazine/twilio-voice/how-to-buy-phone-number-from-twilio-cornsole)
 
-1. Find available phone number
-`twilio api:core:available-phone-numbers:local:list --country-code="US" --voice-enabled --properties="phoneNumber"`
+1. [AmiVoice Cloud Platform アカウント作成](https://acp.amivoice.com/main/)
 
-2. Purchase the phone number (where `+123456789` is a number you found)
-`twilio api:core:incoming-phone-numbers:create --phone-number="+123456789"`
+1. `.env.example`ファイルをコピーして`.env`ファイルを作成
 
-3. Start ngrok
+1. `AMIVOICE_API_KEY`にAmiVoice Cloud Platformのマイページから取得したAPIキーを設定
+
+1. ngrokを起動
 `ngrok http 8080`
 
-4. Edit the `templates/streams` file to replace `<ngrok url>` with your ngrok host.
+1. `templates/streams`ファイルの`<ngrok url>`部分を上記手順で起動した、ngrokのものに修正
 
-5. Make the call where `+123456789` is the Twilio number you bought and `+198765432` is your phone number and `abcdef.ngrok.io` is your ngrok host.
-`twilio api:core:calls:create --from="+123456789" --to="+198765432" --url="https://abcdef.ngrok.io/twiml"`
-
-### Configure using the Console
-
-1. Access the [Twilio console](https://www.twilio.com/console/voice/numbers) to get a `<TWILIO-PHONE-NUMBER>`.
-2. Run the server (listening on port 8080)
-3. Use ngrok to make your server publicly available: `ngrok http 8080`
-4. Edit the streams.xml file in the `templates` directory and add your ngrok URL as `wss://<ngrok url>`
-5. Run the curl command in order to make the proper call
-`curl -XPOST https://api.twilio.com/2010-04-01/Accounts/<ACCOUNT-SID>/Calls.json -d "Url=http://<ngrok url>/twiml" -d "To=<PHONE-NUMBER>" -d "From=<TWILIO-PHONE-NUMBER>" -u <ACCOUNT-SID>:<AUTH-TOKEN>`
+5. 購入した、電話番号のA CALL COMES INに`<ngrok url>/twiml`を設定
+例：'https://xxxx.ngrok.io/twiml'
