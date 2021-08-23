@@ -58,7 +58,7 @@ class MediaStream {
     this.messageCount = 0;
     this.started = false;
     this.mediaData = '';
-    this.amiVoiceConnections = [];
+    this.amiVoiceConnections = {};
   }
 
   processMessage(message) {
@@ -80,9 +80,6 @@ class MediaStream {
       if (data.event === "close") {
         log('Media WS: Close event received: ', data);
         this.close();
-        this.amiVoiceConnections.forEach(connection => {
-          connection.close();
-        })
       }
       this.messageCount++;
     } else if (message.type === 'binary') {
@@ -92,6 +89,10 @@ class MediaStream {
 
   close(){
     log('Media WS: Closed. Received a total of [' + this.messageCount + '] messages');
+    Object.keys(this.amiVoiceConnections).forEach(key => {
+      this.amiVoiceConnections[key].close();
+    });
+    this.amiVoiceConnections = {};
   }
 }
 
