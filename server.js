@@ -1,15 +1,16 @@
 "use strict";
 
+require('dotenv').config();
+const env = process.env;
 const fs = require('fs');
 const path = require('path');
 var http = require('http');
 var HttpDispatcher = require('httpdispatcher');
 var WebSocketServer = require('websocket').server;
-var WebSocketClient = require('websocket').client;
+const { AmiVoiceService } = require("./amivoice-service");
 
 var dispatcher = new HttpDispatcher();
 var wsserver = http.createServer(handleRequest);
-var amiVoiceConnection = null;
 
 const HTTP_SERVER_PORT = 8080;
 
@@ -47,20 +48,17 @@ dispatcher.onPost('/twiml', function(req,res) {
 
 mediaws.on('connect', function(connection) {
   log('Media WS: Connection accepted');
-  new MediaStream(connection, amiVoiceConnection);
+  new MediaStream(connection);
 });
 
 class MediaStream {
-  constructor(connection,amiVoiceConnection) {
+  constructor(connection) {
     connection.on('message', this.processMessage.bind(this));
     connection.on('close', this.close.bind(this));
-    amiVoiceConnection.on('message', this.receiveAmiVoiceMessage.bind(this));
-    amiVoiceConnection.on('error', this.errorAmiVoice.bind(this));
-    amiVoiceConnection.on('close', this.closeAmiVoice.bind(this));
     this.messageCount = 0;
     this.started = false;
     this.mediaData = '';
-    this.amiVoiceConnection = amiVoiceConnection;
+    this.amiVoiceConnections = [];
   }
 
   processMessage(message) {
@@ -68,31 +66,23 @@ class MediaStream {
       var data = JSON.parse(message.utf8Data);
       if (data.event === "connected") {
         log('Media WS: Connected event received: ', data);
-
       }
       if (data.event === "start") {
         log('Media WS: Start event received: ', data);
-
-        var command = "s";
-        command += " mulaw";
-        command += " -a-general"
-        command += " authorization=your api key"
-        console.log(command);
-        this.amiVoiceConnection.send(command);
+        data.start.tracks.forEach(track => {
+          this.amiVoiceConnections[track] = new AmiVoiceService(env.AMIVOICE_API_KEY, track);
+        });
       }
       if (data.event === "media") {
-        const buff = Buffer.from(data.media.payload, 'base64');
-
-        var outData = new Uint8Array(buff.length + 1);
-        outData[0] = 0x70; // 'p'
-        for (var i = 0; i < buff.length; i++) {
-          outData[1 + i] = buff[i];
-        }
-        this.amiVoiceConnection.send(Buffer.from(outData));
+        //log('Media WS: Media event received: ', data);
+        this.amiVoiceConnections[data.media.track].send(data.media.payload);
       }
       if (data.event === "close") {
         log('Media WS: Close event received: ', data);
         this.close();
+        this.amiVoiceConnections.forEach(connection => {
+          connection.close();
+        })
       }
       this.messageCount++;
     } else if (message.type === 'binary') {
@@ -102,10 +92,6 @@ class MediaStream {
 
   close(){
     log('Media WS: Closed. Received a total of [' + this.messageCount + '] messages');
-    if (this.started) {
-      var endCommand = "e";
-      this.amiVoiceConnection.send(endCommand);
-    }
   }
 }
 
