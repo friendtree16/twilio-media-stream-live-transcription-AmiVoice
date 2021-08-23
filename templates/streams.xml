@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
   <Start>
-    <Stream track="both_tracks" url="wss:/<ngrok url>/"></Stream>
+    <Stream url="wss://<ngrok url>"></Stream>
   </Start>
   <!-- <Dial>your phone number</Dial> -->
   <Pause length="40"/>
