@@ -7,11 +7,15 @@
 ### Installation
 
 **Requires Node >= v12.1.0**
+
 以下コマンドを実行
+
 ```npm install```
 
 #### Running the server
+
 以下コマンドを実行
+
 `node ./server.js`
 
 ## Setup
