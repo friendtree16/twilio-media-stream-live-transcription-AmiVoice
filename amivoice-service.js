@@ -1,7 +1,9 @@
+const EventEmitter = require('events');
 var WebSocketClient = require('websocket').client;
 
-class AmiVoiceService {
+class AmiVoiceService extends EventEmitter {
     constructor(apiKey, track = 'inbound') {
+        super();
         this.apiKey = apiKey;
         this.track = track;
         this.isReady = false;
@@ -42,6 +44,7 @@ class AmiVoiceService {
                             // 認識処理が完了し、認識結果が受容されたとき
                             const data = JSON.parse(message.utf8Data.substring(2));
                             console.log('確定  track:' + this.track + ' message:' + data.text);
+                            this.emit('transcription', {track:this.track,body:data});
                         } else if (tag === 'G') {
                             // サーバ内で生成されたアクション情報 ※このイベントは無視する
                             //https://acp.amivoice.com/main/manual/g-%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88%e3%83%91%e3%82%b1%e3%83%83%e3%83%88/

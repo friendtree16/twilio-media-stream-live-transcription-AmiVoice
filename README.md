@@ -34,7 +34,7 @@
 1. ngrokを起動
 `ngrok http 8080`
 
-1. `templates/streams`ファイルの`<ngrok url>`部分を上記手順で起動した、ngrokのものに修正
+1. `templates/streams`ファイルの`<ngrok url>`部分を上記手順で起動した、ngrokのドメインに修正
 
 5. 購入した、電話番号のA CALL COMES INに`<ngrok url>/twiml`を設定
 例：'https://xxxx.ngrok.io/twiml'

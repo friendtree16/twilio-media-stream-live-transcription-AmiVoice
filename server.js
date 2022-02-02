@@ -71,6 +71,7 @@ class MediaStream {
         log('Media WS: Start event received: ', data);
         data.start.tracks.forEach(track => {
           this.amiVoiceConnections[track] = new AmiVoiceService(env.AMIVOICE_API_KEY, track);
+          this.amiVoiceConnections[track].on('transcription', this.receivedMessage);
         });
       }
       if (data.event === "media") {
@@ -94,6 +95,11 @@ class MediaStream {
     });
     this.amiVoiceConnections = {};
   }
+
+  receivedMessage(data) {
+    console.log(`${data.track}:${data.body.text}`);
+  }
+
 }
 
 wsserver.listen(HTTP_SERVER_PORT, function(){
