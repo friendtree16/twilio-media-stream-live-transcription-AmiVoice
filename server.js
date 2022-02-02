@@ -2,15 +2,15 @@
 
 require('dotenv').config();
 const env = process.env;
-const fs = require('fs');
-const path = require('path');
-var http = require('http');
+const Fs = require('fs');
+const Path = require('path');
+var Http = require('http');
 var HttpDispatcher = require('httpdispatcher');
 var WebSocketServer = require('websocket').server;
 const { AmiVoiceService } = require("./amivoice-service");
 
 var dispatcher = new HttpDispatcher();
-var wsserver = http.createServer(handleRequest);
+var wsserver = Http.createServer(handleRequest);
 
 const HTTP_SERVER_PORT = 8080;
 
@@ -34,15 +34,15 @@ function handleRequest(request, response){
 dispatcher.onPost('/twiml', function(req,res) {
   log('POST TwiML');
 
-  var filePath = path.join(__dirname+'/templates', 'streams.xml');
-  var stat = fs.statSync(filePath);
+  var filePath = Path.join(__dirname+'/templates', 'streams.xml');
+  var stat = Fs.statSync(filePath);
 
   res.writeHead(200, {
     'Content-Type': 'text/xml',
     'Content-Length': stat.size
   });
 
-  var readStream = fs.createReadStream(filePath);
+  var readStream = Fs.createReadStream(filePath);
   readStream.pipe(res);
 });
 
