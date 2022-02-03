@@ -4,17 +4,17 @@ require('dotenv').config();
 const env = process.env;
 const Fs = require('fs');
 const Path = require('path');
-var Http = require('http');
-var HttpDispatcher = require('httpdispatcher');
-var WebSocketServer = require('websocket').server;
+const Http = require('http');
+const HttpDispatcher = require('httpdispatcher');
+const WebSocketServer = require('websocket').server;
 const { AmiVoiceService } = require("./amivoice-service");
 
-var dispatcher = new HttpDispatcher();
-var wsserver = Http.createServer(handleRequest);
+const dispatcher = new HttpDispatcher();
+const wsserver = Http.createServer(handleRequest);
 
 const HTTP_SERVER_PORT = 8080;
 
-var mediaws = new WebSocketServer({
+const mediaws = new WebSocketServer({
   httpServer: wsserver,
   autoAcceptConnections: true,
 });
@@ -34,15 +34,15 @@ function handleRequest(request, response){
 dispatcher.onPost('/twiml', function(req,res) {
   log('POST TwiML');
 
-  var filePath = Path.join(__dirname+'/templates', 'streams.xml');
-  var stat = Fs.statSync(filePath);
+  const filePath = Path.join(__dirname+'/templates', 'streams.xml');
+  const stat = Fs.statSync(filePath);
 
   res.writeHead(200, {
     'Content-Type': 'text/xml',
     'Content-Length': stat.size
   });
 
-  var readStream = Fs.createReadStream(filePath);
+  const readStream = Fs.createReadStream(filePath);
   readStream.pipe(res);
 });
 
@@ -63,7 +63,7 @@ class MediaStream {
 
   processMessage(message) {
     if (message.type === 'utf8') {
-      var data = JSON.parse(message.utf8Data);
+      const data = JSON.parse(message.utf8Data);
       if (data.event === "connected") {
         log('Media WS: Connected event received: ', data);
       }

@@ -1,5 +1,5 @@
 const EventEmitter = require('events');
-var WebSocketClient = require('websocket').client;
+const WebSocketClient = require('websocket').client;
 
 class AmiVoiceService extends EventEmitter {
     constructor(apiKey, track = 'inbound') {
@@ -81,7 +81,7 @@ class AmiVoiceService extends EventEmitter {
         }
 
         if (this.isReady && !this.isStarted) {
-            var command = "s";
+            const command = "s";
             command += " mulaw";
             command += " -a-general";
             command += " authorization=" + this.apiKey;
@@ -94,9 +94,9 @@ class AmiVoiceService extends EventEmitter {
         if (this.isStarted) {
             const buff = Buffer.from(payload, 'base64');
 
-            var outData = new Uint8Array(buff.length + 1);
+            const outData = new Uint8Array(buff.length + 1);
             outData[0] = 0x70; // 'p'
-            for (var i = 0; i < buff.length; i++) {
+            for (const i = 0; i < buff.length; i++) {
                 outData[1 + i] = buff[i];
             }
             this.connection.send(Buffer.from(outData));
@@ -105,7 +105,7 @@ class AmiVoiceService extends EventEmitter {
 
     close() {
         if (this.isStarted && this.isReady) {
-            var endCommand = "e";
+            const endCommand = "e";
             this.connection.send(endCommand);
             this.isStarted = false;
             console.log('send close command');
