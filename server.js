@@ -31,7 +31,7 @@ function handleRequest(request, response){
   }
 }
 
-dispatcher.onPost('/twiml', function(req,res) {
+dispatcher.onPost('/twiml', (req,res) => {
   log('POST TwiML');
 
   const filePath = Path.join(__dirname+'/templates', 'streams.xml');
@@ -46,7 +46,7 @@ dispatcher.onPost('/twiml', function(req,res) {
   readStream.pipe(res);
 });
 
-mediaws.on('connect', function(connection) {
+mediaws.on('connect', connection => {
   log('Media WS: Connection accepted');
   new MediaStream(connection);
 });
@@ -102,6 +102,6 @@ class MediaStream {
 
 }
 
-wsserver.listen(HTTP_SERVER_PORT, function(){
+wsserver.listen(HTTP_SERVER_PORT, () => {
   console.log("Server listening on: http://localhost:%s", HTTP_SERVER_PORT);
 });
