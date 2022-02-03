@@ -81,7 +81,7 @@ class AmiVoiceService extends EventEmitter {
         }
 
         if (this.isReady && !this.isStarted) {
-            const command = "s";
+            var command = "s";
             command += " mulaw";
             command += " -a-general";
             command += " authorization=" + this.apiKey;
@@ -96,7 +96,7 @@ class AmiVoiceService extends EventEmitter {
 
             const outData = new Uint8Array(buff.length + 1);
             outData[0] = 0x70; // 'p'
-            for (const i = 0; i < buff.length; i++) {
+            for (var i = 0; i < buff.length; i++) {
                 outData[1 + i] = buff[i];
             }
             this.connection.send(Buffer.from(outData));
