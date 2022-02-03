@@ -4,5 +4,6 @@
     <Stream url="wss://<ngrok url>"></Stream>
   </Start>
   <!-- <Dial>your phone number</Dial> -->
+  <!-- Websocketに接続するまでPauseする。これがないとtwiml返した瞬間に電話が切れる -->
   <Pause length="40"/>
 </Response>
