@@ -97,7 +97,7 @@ class MediaStream {
   }
 
   receivedMessage(data) {
-    console.log(`${data.track}:${data.body.text}`);
+    log(`${data.track}:${data.body.text}`);
   }
 
 }
