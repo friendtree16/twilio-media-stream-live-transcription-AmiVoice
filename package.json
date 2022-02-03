@@ -1,5 +1,5 @@
 {
-  "name": "basic",
+  "name": "twilio-media-stream-live-transcription-amivoice",
   "version": "0.0.1",
   "description": "Basic Programmable Streams demo",
   "main": "server.js",
