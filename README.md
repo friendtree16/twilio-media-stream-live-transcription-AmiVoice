@@ -57,9 +57,9 @@
   },
   streamSid: ''
 }
-amivoice connected
+Amivoice connected
 s mulaw -a-general authorization=
-amiVoice started.
+AmiVoice started.
 認識中 track:inbound message:1...
 認識中 track:inbound message:一番...
 認識中 track:inbound message:19...
@@ -69,5 +69,5 @@ amiVoice started.
 確定  track:inbound message:一番吸収した。
 2022-02-03T00:59:34.050Z inbound:一番吸収した。
 send close command
-amiVoice closed.
+AmiVoice closed.
 ```

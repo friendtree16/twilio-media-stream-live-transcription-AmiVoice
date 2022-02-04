@@ -28,7 +28,7 @@ class AmiVoiceService extends EventEmitter {
                         const tag = message.utf8Data.charAt(0);
                         if (tag == 's') {
                             // 認識スタート
-                            console.log('amiVoice started.');
+                            console.log('AmiVoice started.');
                             this.isStarted = true;
                         } else if (tag === 'S') {
                             // サーバ内で発話区間の先頭が検出された S <start_time>
@@ -50,7 +50,7 @@ class AmiVoiceService extends EventEmitter {
                             //https://acp.amivoice.com/main/manual/g-%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88%e3%83%91%e3%82%b1%e3%83%83%e3%83%88/
                         } else if (tag == 'e') {
                             this.isStarted = false;
-                            console.log('amiVoice closed.');
+                            console.log('AmiVoice closed.');
                         }
                     }
                 });
