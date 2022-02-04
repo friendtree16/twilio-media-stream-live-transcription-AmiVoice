@@ -21,7 +21,7 @@ class AmiVoiceService extends EventEmitter {
 
             client.on('connect', connection => {
                 this.connection = connection;
-                console.log('amivoice connected');
+                console.log('AmiVoice connected');
 
                 connection.on('message', message => {
                     if (message.type === 'utf8') {
